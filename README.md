@@ -1,128 +1,133 @@
-# 概要
+# 【Android】アプリにログイン機能をつけよう！ for Kotlin
 
-１）[ニフクラ mobile backend - mBaaS](https://mbaas.nifcloud.com/)での会員の認証方法は以下の4つがあります。
+![画像1](/readme-img/001.png)
 
- * ユーザ名・パスワードでの認証
- * メールアドレス・パスワードでの認証
-    * [ドキュメント](https://mbaas.nifcloud.com/doc/current/user/authorize_email_android.html)
- * SNSアカウントでの認証
-   * [ドキュメント（Facebookアカウント）](https://mbaas.nifcloud.com/doc/current/sns/facebook_android.html)
-   * [ドキュメント（Twitterアカウント）](https://mbaas.nifcloud.com/doc/current/sns/twitter_android.html)
-   * [ドキュメント（Googleアカウント）](https://mbaas.nifcloud.com/doc/current/sns/google_android.html)
- * 匿名認証
-   * [ドキュメント](https://mbaas.nifcloud.com/doc/current/user/authorize_anonymous_android.html)
+## 概要
+* [ニフクラ mobile backend](https://mbaas.nifcloud.com/) の『会員管理機能』を利用して、Androidアプリにログイン機能を実装したサンプルアプリです
+* 簡単な操作ですぐに [ ニフクラ mobile backend ](https://mbaas.nifcloud.com/)の機能を体験いただけます
 
-２）今回はAndroidで、ユーザ名・パスワードでの認証方法について説明していきます。
-イメージ的は以下のようになります。
+##  ニフクラ mobile backend って何？？
+スマートフォンアプリのバックエンド機能（プッシュ通知・データストア・会員管理・ファイルストア・SNS連携・位置情報検索・スクリプト）が**開発不要**、しかも基本**無料**(注1)で使えるクラウドサービス！
 
-![画像01](/readme-img/001.png)
+注1：詳しくは[こちら](https://mbaas.nifcloud.com/price.htm)をご覧ください
 
+### ニフクラ mobile backend の会員の認証方法
+* ユーザ名・パスワード認証
+* メールアドレス・パスワード認証
+* SNSアカウントでの認証
+* 匿名認証
 
-# 準備
+本サンプルアプリは、ユーザ名・パスワードでの認証方法について説明していきます。
 
-* Android Studio
-* mBaaSの[アカウント作成](https://mbaas.nifcloud.com/signup.htm)
+## 動作環境
 
-# 手順
-
-* テンプレートプロジェクトをダウンロード
-* SDKを追加（済み・最新SDKを利用したい場合、更新作業を行ってください)
+* Android Studio ver. 3.1
+* Android OS ver. 6.0
+* Android SDK v3
   - SDK v2系だと動作しないので注意
-* アプリ作成し、キーを設定
-* 動作確認
 
-# STEP 1. テンプレートプロジェクト
+※上記内容で動作確認をしています。
 
-* プロジェクトの[Githubページ](https://github.com/NIFCloud-mbaas/KotlinLoginApp)から「Download ZIP」をクリックします。
-* プロジェクトを解凍します。
-* AndroidStudioを開きます。
-* 解凍したプロジェクトを選択します。
-![OpenFileProject.png](/readme-img/SelectProject.png)
+## 手順
+### 1. ニフクラ mobile backend の会員登録・ログインとアプリの新規作成
+* 下記リンクから会員登録（無料）をします
+  * https://console.mbaas.nifcloud.com/signup
+* 登録ができたら下記リンクからログインします
+  * https://console.mbaas.nifcloud.com/
+* 下図のように「アプリの新規作成」画面が出るのでアプリを作成します
+  * 既に mobile backend を利用したことがある方は左上の「＋新しいアプリ」をクリックすると同じ画面が表示されます
 
-プロジェクトを選択し開きます。
+![画像3](/readme-img/003.png)
+
+* アプリ作成されるとAPIキー（アプリケーションキーとクライアントキー）が発行されます
+* この２種類のAPIキーはこの後ダウンロードするサンプルアプリと ニフクラ mobile backend を紐付けるため、あとで使います。
+
+![画像04](/readme-img/004.png)
+
+* ついでに、この後動作確認で会員情報が保存される場所も確認しておきましょう
+
+![画像05](/readme-img/005.png)
+
+### 2. サンプルプロジェクトのダウンロード
+* 下記リンクをクリックしてプロジェクトをダウンロードします
+ * https://github.com/NiFCloud-mbaas/KotlinLoginApp/archive/master.zip
+* ダウンロードしたプロジェクトを解凍します
+* AndroidStudio を開きます、「Open an existing Android Studio projct」をクリックして解凍したプロジェクトを選択します
+
+![5554_Nexus_5_API_23_2.png](https://qiita-image-store.s3.amazonaws.com/0/18698/e6d33cfd-978d-8688-a7ad-de0e9bc90daf.png)
+
+* プロジェクトが開かれます
+
 ![MainDesing.png](/readme-img/MainDesing.png)
 
 
-# STEP 2. SDKを追加と設定 (済み)
+### 3. SDKの導入（実装済み）
 
-Android SDKとは、ニフクラ mobile backendが提供している「データストア」「プッシュ通知」などの機能を簡単まコードで利用できるものです。
-
-![002.png](https://qiita-image-store.s3.amazonaws.com/0/18698/75b7512c-7dec-9931-b8f6-66f6dd5a73af.png)
-
-mBaaSでは、Android, iOS, Unity, JavaScript SDKを提供しています。
-今回Android SDKの追加し方と設定を紹介します。
-※ダウンロードしたプロジェクトには既に設定済みですが、最新版が必要な場合は入れ替える必要があります。また既存のプロジェクトでニフクラ mobile backend を利用する場合も同じくSDKの実装が必要です。
+※このサンプルアプリには既にSDKが実装済み（下記手順）となっています。（ver.3.0.0)<br>　最新版をご利用の場合は入れ替えてご利用ください。
 
 * SDKダウンロード
-SDKはここ（SDK[リリースページ](https://github.com/NIFCloud-mbaas/ncmb_android/releases)）から取得してください。
+SDKはここ（[SDK リリースページ](https://github.com/NIFCloud-mbaas/ncmb_android/releases)）から取得してください.
   - NCMB.jarファイルがダウンロードします。
 * SDKをインポート
   - app/libsフォルダにNCMB.jarをコピーします
 * 設定追加
   - app/build.gradleファイルに以下を追加します
-
-```
+```gradle
 dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile files('libs/NCMB.jar')
 }
 ```
   - androidManifestの設定
-
-<application>タグの直前に以下のpermissionを追加します。
-
-```
+    - <application>タグの直前に以下のpermissionを追加します
+```html
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
+### 4. APIキーの設定
 
-# STEP 3. アプリキー設定
+* AndroidStudio で MainActivity.kt を開きます
+  * ディレクトリはデフォルトで「Android」が選択されていますので、「Project」に切り替えてから探してください
 
-* 会員登録（無料）をし、登録ができたらログインをすると下図のように「アプリの新規作成」画面出るのでアプリを作成します。
+![画像09](/readme-img/009.png)
 
-![画像03](/readme-img/003.png)
-
-* アプリ作成されると下図のような画面になります。
-* この２種類のAPIキー（アプリケーションキーとクライアントキー）は先ほどインポートしたAndroidStudioで作成するAndroidアプリにニフクラ mobile backendの紐付けるため、あとで使います。
-
-![画像04](/readme-img/004.png)
-
-この後動作確認でデータが保存される場所も確認しておきましょう。
-
-![画像05](/readme-img/005.png)
-
-* AndroidStudioでMainActivity.ktにあるAPIキー（アプリケーションキーとクライアントキー）の設定をします。
+* APIキー（アプリケーションキーとクライアントキー）の設定をします
 
 ![画像07](/readme-img/007.png)
 
-* AndroidStudioからビルドする。
-    * 「プロジェクト場所」\app\build\outputs\apk\ ***.apk ファイルが生成される
+* それぞれ `YOUR_APPLICATION_KEY` と `YOUR_CLIENT_KEY` の部分を書き換えます
+ * このとき、ダブルクォーテーション（`"`）を消さないように注意してください
 
-# STEP 4. 確認
+### 5. 動作確認
 
-アプリにてボタンをタブし、新規登録、ログインする事が確認出来ます。
+* エミュレーターでアプリをビルドします
+ * 失敗する場合は一度「Clean Project」を実行してから再度ビルドしてください
+
+ * 画面に従い新規登録、ログインを実施してみましょう
+
 ![AccountPattern.png](/readme-img/AccountPattern.png)
+
 ![LoginPattern.png](/readme-img/LoginPattern.png)
 
-mBaaS側も会員管理データが保存されたことを確認しています！
+* ニフクラ mobile backend 側を確認すると、会員管理データが保存されたことを確認できます
 
 ![画像08](/readme-img/008.png)
 
-# コード説明
 
-* SDKおよび必要なライブラリーをインポートします
+## コード説明
+
+### 必要なライブラリーのインポート
 
 ```kotlin
-
 import com.nifcloud.mbaas.core.NCMB
 import com.nifcloud.mbaas.core.NCMBUser
 import com.nifcloud.mbaas.core.NCMBException
 ```
 
-* SDKを初期化
+### SDKの初期化
 
-MainActivityのOnCreateメソッドに実装、ここでAPIキーを渡します。
+* MainActivity.kt の `OnCreate` メソッドに実装しています
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,13 +137,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-１）会員の新規登録実装
+### 新規登録
 
-* mBaaSのAndroid SDKが提供するNCMBUserクラスが会員管理を操作するためのクラス。データを保存するには、このクラスが提供するsignUpInBackgroundメソッドを利用し、登録、ログインします。
-* 入力ユーザ名とパスワードの妥当性を確認し、設定したユーザ名(userName)とパスワード(password)で会員登録を行います。
-* signUpInBackground()を実施することで、非同期に保存が行われます。非同期実施するため、DoneCallBack()を使って、成功・失敗処理を指定します。
- - 会員登録に成功した場合は、ログイン成功ページを表示します。
- - 会員登録に失敗した場合、アラートでログイン失敗を表示します。
+* SDKが提供する `NCMBUser` クラスが会員管理を操作するためのクラスです
+* このクラスが提供する `signUpInBackground` メソッドを利用し、新規登録を行います（非同期処理）
+* 設定したユーザ名(userName)とパスワード(password)で会員登録を行います
 
 ```kotlin
 fun signup() {
@@ -169,13 +172,10 @@ fun signup() {
 }
 ```
 
-２）既存会員のログイン実装
+### 既存会員のログイン
 
-* mBaaSのAndroid SDKが提供するNCMBUserクラスが会員管理操作するためのクラス。このクラスが提供するloginInBackgroundメソッドを利用し、ログインします。
-* 入力されたユーザ名とパスワードの妥当性を確認し、ユーザ名とパスワードでログインを実行します。
-* loginInBackground()を実施結果に応じて、
- - ログインに成功した場合は、ログイン成功ページを表示します。
- - ログインに失敗する場合、アラートでログイン失敗を表示します。
+* `NCMBUser` クラスが提供する `loginInBackground` メソッドを利用し、ログインします（非同期処理）
+* 設定したユーザ名(userName)とパスワード(password)でログインを行いま
 
 ```kotlin
 fun login() {
@@ -204,21 +204,26 @@ fun login() {
 }
 ```
 
-# 参考
+### ログアウト
 
-サンプルコードをカスタマイズすることで、様々な機能を実装できます！
-データ保存・データ検索・会員管理・プッシュ通知などの機能を実装したい場合には、
-以下のドキュメントもご参考ください。
+* `NCMBUser` クラスが提供する `loginInBackground` メソッドを利用し、ログアウトを行います（非同期処理）
+
+```kotlin
+NCMBUser.logoutInBackground { e ->
+    if (e != null) {
+        //エラー時の処理
+    }
+}
+```
+
+## 参考
+
+データ保存・データ検索・会員管理・プッシュ通知などの機能を実装したい場合は、以下のドキュメント（Android for Java）もご参照ください。
 
 * [ドキュメント](https://mbaas.nifcloud.com/doc/current/)
-* [ドキュメント・データストア](https://mbaas.nifcloud.com/doc/current/datastore/basic_usage_android.html)
-* [ドキュメント・会員管理](https://mbaas.nifcloud.com/doc/current/user/basic_usage_android.html)
-* [ドキュメント・プッシュ通知](https://mbaas.nifcloud.com/doc/current/push/basic_usage_android.html)
-
-# 最後に
-
-データを保存には自前でサーバを立て、運用・設計するだけでなく、アプリとサーバー間のやりとりなど、さまざまなことを考慮しなければなりません。そこでこのようなmBaaSサービスを使って、サーバー運用の手間をなくすことが、アプリ開発を最速・最短で行う重要な方法となってきます。開発も数行のコード書けばいいという便利なものです！しかも無料から始められます！導入してみてはいかがでしょうか？
-
+  * [データストア](https://mbaas.nifcloud.com/doc/current/datastore/basic_usage_android.html)
+  * [会員管理](https://mbaas.nifcloud.com/doc/current/user/basic_usage_android.html)
+  * [プッシュ通知](https://mbaas.nifcloud.com/doc/current/push/basic_usage_android.html)
 
 # Contributing
 
