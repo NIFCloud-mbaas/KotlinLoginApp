@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NCMBLoginSample</string>
+    <string name="app_name">KotlinLoginSample</string>
 
     <string name="hello_world">You are logged in!</string>
     <string name="action_settings">Settings</string>
