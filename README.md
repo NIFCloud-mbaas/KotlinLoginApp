@@ -50,7 +50,7 @@
 
 ### 2. サンプルプロジェクトのダウンロード
 * 下記リンクをクリックしてプロジェクトをダウンロードします
- * https://github.com/NiFCloud-mbaas/KotlinLoginApp/archive/master.zip
+ 　* https://github.com/NiFCloud-mbaas/KotlinLoginApp/archive/master.zip
 * ダウンロードしたプロジェクトを解凍します
 * AndroidStudio を開きます、「Open an existing Android Studio projct」をクリックして解凍したプロジェクトを選択します
 
@@ -102,12 +102,14 @@ dependencies {
 ### 5. 動作確認
 
 * エミュレーターでアプリをビルドします
- * 失敗する場合は一度「Clean Project」を実行してから再度ビルドしてください
+  * 失敗する場合は一度「Clean Project」を実行してから再度ビルドしてください
 
- * 画面に従い新規登録、ログインを実施してみましょう
-
+  * 画面に従い新規登録、ログインを実施してみましょう
+ 
+* 【会員の新規登録の場合】
 ![AccountPattern.png](/readme-img/AccountPattern.png)
 
+* 【既存会員のログインの場合】
 ![LoginPattern.png](/readme-img/LoginPattern.png)
 
 * ニフクラ mobile backend 側を確認すると、会員管理データが保存されたことを確認できます
@@ -236,4 +238,4 @@ NCMBUser.logoutInBackground { e ->
 # License
 
     MITライセンス
-    NIFCloud mobile backendのAndroid SDKのライセンス
+    NIFCLOUD mobile backendのAndroid SDKのライセンス
