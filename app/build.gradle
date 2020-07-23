@@ -8,7 +8,6 @@ kapt {
 
 android {
     compileSdkVersion 27
-//    buildToolsVersion '22.0.1'
 
     defaultConfig {
         applicationId "com.nifcloud.user"
@@ -36,7 +35,7 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.3.1'
     implementation files('libs/NCMB.jar')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 repositories {
     mavenCentral()
