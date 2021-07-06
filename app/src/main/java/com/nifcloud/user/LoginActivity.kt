@@ -4,12 +4,12 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.nifcloud.mbaas.core.NCMBException
@@ -84,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == Activity.RESULT_OK) {
